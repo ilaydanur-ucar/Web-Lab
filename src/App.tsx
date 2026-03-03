@@ -125,40 +125,36 @@ function App() {
 
             <div className="projects-grid">
               <article className="project-card">
-                <div className="project-image" aria-hidden="true">Churn Model</div>
+                <div className="project-image" aria-hidden="true">ElektrAize</div>
                 <div className="project-content">
-                  <h3 className="project-title">Müşteri Kayıp (Churn) Tahmin Modeli</h3>
-                  <p className="project-description">Telekomünikasyon sektöründeki gerçek veri setleri kullanılarak, makine öğrenmesi algoritmaları ve Random Forest modeli ile müşterilerin hizmeti bırakma olasılıklarının yüksek doğrulukla tahmin edildiği analitik bir veri bilimi çalışması.</p>
+                  <h3 className="project-title">ElektrAize</h3>
+                  <p className="project-description">81 il bazlı enerji tüketimi, tahminleme ve anomali tespit sistemi.</p>
                   <ul className="project-tags" aria-label="Kullanılan teknolojiler">
                     <li className="project-tag">Python</li>
-                    <li className="project-tag">Pandas</li>
-                    <li className="project-tag">Scikit-Learn</li>
                   </ul>
                 </div>
               </article>
 
               <article className="project-card">
-                <div className="project-image" aria-hidden="true">NLP Analiz</div>
+                <div className="project-image" aria-hidden="true">LiveKit Agents</div>
                 <div className="project-content">
-                  <h3 className="project-title">NLP ile Duygu Analizi (Sentiment Analysis)</h3>
-                  <p className="project-description">Doğal Dil İşleme (NLP) teknikleri kullanarak, geniş çaplı müşteri yorumlarının olumlu, olumsuz ve nötr olarak sınıflandırılmasını sağlayan derin öğrenme tabanlı yapay zeka destekli metin sınıflandırma aracı.</p>
+                  <h3 className="project-title">python-agents-examples</h3>
+                  <p className="project-description">Forked from livekit-examples/python-agents-examples. Comprehensive collection of examples for LiveKit Agents with Python.</p>
                   <ul className="project-tags" aria-label="Kullanılan teknolojiler">
-                    <li className="project-tag">NLTK</li>
-                    <li className="project-tag">TensorFlow</li>
-                    <li className="project-tag">ML</li>
+                    <li className="project-tag">TypeScript</li>
+                    <li className="project-tag">Python</li>
                   </ul>
                 </div>
               </article>
 
               <article className="project-card">
-                <div className="project-image" aria-hidden="true">Data Vız</div>
+                <div className="project-image" aria-hidden="true">WindSentinel</div>
                 <div className="project-content">
-                  <h3 className="project-title">Etkileşimli E-Ticaret Veri Görselleştirme</h3>
-                  <p className="project-description">Milyonlarca satırlık geçmiş satış verisinin işlenip temizlenmesi ile oluşturulmuş kapsamlı analiz dashboard'u. Dinamik grafikler ile satış trendleri, bölgesel performans ve geleceğe yönelik veri odaklı tahminlemeler.</p>
+                  <h3 className="project-title">WindSentinel</h3>
+                  <p className="project-description">Event-Driven Microservice Architecture for Early Fault Detection in Wind Turbines Using SCADA Data and Field Measurements.</p>
                   <ul className="project-tags" aria-label="Kullanılan teknolojiler">
-                    <li className="project-tag">Data Science</li>
-                    <li className="project-tag">Matplotlib</li>
-                    <li className="project-tag">SQL</li>
+                    <li className="project-tag">Microservices</li>
+                    <li className="project-tag">SCADA</li>
                   </ul>
                 </div>
               </article>
