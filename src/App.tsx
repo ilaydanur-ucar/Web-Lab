@@ -1,181 +1,255 @@
+import { useEffect } from 'react'
 import './App.css'
 
 function App() {
+  // Smooth scroll and animations
+  useEffect(() => {
+    // Scroll animations for elements
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          (entry.target as HTMLElement).style.opacity = '1';
+          (entry.target as HTMLElement).style.transform = 'translateY(0)';
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.project-card, .section-title, .about-content').forEach(el => {
+      observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
+    e.preventDefault();
+    const target = document.querySelector(targetId);
+    if (target) {
+      target.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  };
+
   return (
     <>
+      {/* LAB-3: Erişilebilirlik (A11y) - Skip Link */}
       <a href="#main-content" className="skip-link">
         Ana içeriğe atla
       </a>
 
-      <header>
-        <div className="site-title">İlayda Nur Uçar</div>
-        <p className="subtitle">Bilgisayar Mühendisliği Öğrencisi</p>
+      {/* NAVBAR */}
+      <header className="navbar">
+        <div className="logo" aria-label="Site Logosu">İU</div>
+        {/* LAB-3: Semantik <nav> */}
         <nav aria-label="Ana navigasyon">
-          <ul>
-            <li><a href="#hakkimda">Hakkımda</a></li>
-            <li><a href="#projeler">Projeler</a></li>
-            <li><a href="#iletisim">İletişim</a></li>
+          <ul className="nav-links">
+            <li><a href="#about" onClick={(e) => handleSmoothScroll(e, '#about')}>Hakkımda</a></li>
+            <li><a href="#projects" onClick={(e) => handleSmoothScroll(e, '#projects')}>Projelerim</a></li>
+            <li><a href="#contact" onClick={(e) => handleSmoothScroll(e, '#contact')}>İletişim</a></li>
           </ul>
         </nav>
       </header>
 
       <main id="main-content">
-        <section id="hakkimda">
-          <h2>Hakkımda</h2>
-          <div className="about-content">
-            <figure>
-              <img
-                src="https://ui-avatars.com/api/?name=İlayda+Nur+Uçar&size=200&background=eb2424&color=fff&rounded=true"
-                alt="İlayda Nur Uçar'ın profil fotoğrafı"
-                width="200"
-                height="200"
-              />
-              <figcaption>İlayda Nur Uçar</figcaption>
-            </figure>
-            <div className="about-text">
-              <p>
-                Merhaba! Ben İlayda Nur Uçar. Bilgisayar Mühendisliği bölümünde
-                okuyorum. Web geliştirme, yazılım tasarımı ve yeni teknolojiler
-                öğrenmekle ilgileniyorum.
-              </p>
-              <h3>Kullandığım Teknolojiler</h3>
-              <ul className="skill-tags" role="list" aria-label="Beceri etiketleri">
-                <li>HTML5</li>
-                <li>CSS3</li>
-                <li>JavaScript</li>
-                <li>TypeScript</li>
-                <li>React</li>
-                <li>Git</li>
-                <li>Python</li>
-              </ul>
+        {/* HERO SECTION */}
+        <section className="hero">
+          <div className="hero-content">
+            <h1>Merhaba! Ben <span>İlayda</span></h1>
+            <p>Yazılım Mühendisliği öğrencisi, yazılım geliştirici ve veri bilimci. Verileri analiz etmek, makine öğrenmesi modelleri eğitmek ve yapay zeka çözümleri üretme üzerine çalışıyorum. Yenilikçi analitik projelerle gerçek dünya problemlerine çözüm buluyorum.</p>
+            <div className="cta-buttons">
+              <a href="#projects" className="btn btn-primary" onClick={(e) => handleSmoothScroll(e, '#projects')}>Projelerimi Gör</a>
+              <a href="#contact" className="btn btn-secondary" onClick={(e) => handleSmoothScroll(e, '#contact')}>Bana Ulaş</a>
+            </div>
+          </div>
+          <div className="hero-visual" aria-hidden="true">
+            <div className="avatar-circle">İU</div>
+          </div>
+        </section>
+
+        {/* ABOUT SECTION */}
+        <section id="about" className="about">
+          <div className="container">
+            <h2 className="section-title">Hakkımda</h2>
+            <p className="section-subtitle">Kim olduğum ve neler yapabileceğim</p>
+
+            <div className="about-content">
+              <div className="about-text">
+                <p>Yazılım Mühendisliği bölümünde eğitim alan, analitik düşünmeyi ve verilerden anlamlı sonuçlar çıkarmayı hedefleyen bir geliştiriciyim. Temel yazılım geliştirme prensiplerine hakim olmakla beraber, asıl uzmanlık alanımı Veri Bilimi (Data Science), Makine Öğrenmesi (Machine Learning) ve Yapay Zeka (AI) oluşturuyor.</p>
+                <p>Büyük veri setlerini işlemek, istatistiksel modeller oluşturmak ve yapay zeka çözümleri geliştirmek üzerine projeler üretiyorum. Amacım, karmaşık verileri işlenebilir öngörülere dönüştürmek.</p>
+              </div>
+              <div>
+                <h3 className="skills-title">Kullandığım Teknolojiler</h3>
+                <ul className="skills-grid" aria-label="Beceri etiketleri">
+                  <li className="skill-item">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg" alt="Python" className="skill-icon" />
+                    <span>Python</span>
+                  </li>
+                  <li className="skill-item">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postgresql/postgresql-original.svg" alt="PostgreSQL" className="skill-icon" />
+                    <span>PostgreSQL</span>
+                  </li>
+                  <li className="skill-item">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/docker/docker-original.svg" alt="Docker" className="skill-icon" />
+                    <span>Docker</span>
+                  </li>
+                  <li className="skill-item">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/gitlab/gitlab-original.svg" alt="GitLab" className="skill-icon" />
+                    <span>GitLab</span>
+                  </li>
+                  <li className="skill-item">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tensorflow/tensorflow-original.svg" alt="TensorFlow" className="skill-icon" />
+                    <span>TensorFlow</span>
+                  </li>
+                  <li className="skill-item">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/pandas/pandas-original.svg" alt="Pandas" className="skill-icon" />
+                    <span>Pandas</span>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </section>
 
-        <section id="projeler">
-          <h2>Projelerim</h2>
-          <div className="project-grid">
-            <article className="project-card">
-              <img
-                src="https://placehold.co/600x300/eb2424/ffffff?text=Web+Lab+Projesi"
-                alt="Web Lab Projesi ekran görüntüsü"
-              />
-              <h3>Web Lab Projesi</h3>
-              <p>
-                Vite + React + TypeScript kullanılarak oluşturulmuş
-                modern bir web uygulaması. Semantik HTML5 ve
-                erişilebilirlik ilkelerine uygun olarak geliştirilmiştir.
-              </p>
-              <ul className="skill-tags">
-                <li>React</li>
-                <li>TypeScript</li>
-                <li>Vite</li>
-              </ul>
-            </article>
+        {/* PROJECTS SECTION */}
+        <section id="projects" className="projects">
+          <div className="container">
+            <h2 className="section-title">Projelerim</h2>
+            <p className="section-subtitle">Gerçekleştirdiğim ve öğrendiğim projeler</p>
 
-            <article className="project-card">
-              <img
-                src="https://placehold.co/600x300/eb2424/ffffff?text=Portfolyo+Sayfasi"
-                alt="Kişisel Portföy Sayfası ekran görüntüsü"
-              />
-              <h3>Kişisel Portföy Sayfası</h3>
-              <p>
-                Semantik HTML5 etiketleri, erişilebilirlik (a11y) standartları
-                ve form doğrulama özellikleri ile oluşturulmuş tek sayfalık
-                portföy web sitesi.
-              </p>
-              <ul className="skill-tags">
-                <li>HTML5</li>
-                <li>CSS3</li>
-                <li>React</li>
-              </ul>
-            </article>
+            <div className="projects-grid">
+              <article className="project-card">
+                <div className="project-image" aria-hidden="true">Churn Model</div>
+                <div className="project-content">
+                  <h3 className="project-title">Müşteri Kayıp (Churn) Tahmin Modeli</h3>
+                  <p className="project-description">Telekomünikasyon sektöründeki gerçek veri setleri kullanılarak, makine öğrenmesi algoritmaları ve Random Forest modeli ile müşterilerin hizmeti bırakma olasılıklarının yüksek doğrulukla tahmin edildiği analitik bir veri bilimi çalışması.</p>
+                  <ul className="project-tags" aria-label="Kullanılan teknolojiler">
+                    <li className="project-tag">Python</li>
+                    <li className="project-tag">Pandas</li>
+                    <li className="project-tag">Scikit-Learn</li>
+                  </ul>
+                </div>
+              </article>
 
-            <article className="project-card">
-              <img
-                src="https://placehold.co/600x300/eb2424/ffffff?text=Hava+Durumu+App"
-                alt="Hava Durumu uygulaması ekran görüntüsü"
-              />
-              <h3>Hava Durumu Uygulaması</h3>
-              <p>
-                OpenWeather API ile anlık hava durumu bilgisi sunan
-                modern ve responsive bir web uygulaması.
-              </p>
-              <ul className="skill-tags">
-                <li>JavaScript</li>
-                <li>API</li>
-                <li>CSS3</li>
-              </ul>
-            </article>
+              <article className="project-card">
+                <div className="project-image" aria-hidden="true">NLP Analiz</div>
+                <div className="project-content">
+                  <h3 className="project-title">NLP ile Duygu Analizi (Sentiment Analysis)</h3>
+                  <p className="project-description">Doğal Dil İşleme (NLP) teknikleri kullanarak, geniş çaplı müşteri yorumlarının olumlu, olumsuz ve nötr olarak sınıflandırılmasını sağlayan derin öğrenme tabanlı yapay zeka destekli metin sınıflandırma aracı.</p>
+                  <ul className="project-tags" aria-label="Kullanılan teknolojiler">
+                    <li className="project-tag">NLTK</li>
+                    <li className="project-tag">TensorFlow</li>
+                    <li className="project-tag">ML</li>
+                  </ul>
+                </div>
+              </article>
+
+              <article className="project-card">
+                <div className="project-image" aria-hidden="true">Data Vız</div>
+                <div className="project-content">
+                  <h3 className="project-title">Etkileşimli E-Ticaret Veri Görselleştirme</h3>
+                  <p className="project-description">Milyonlarca satırlık geçmiş satış verisinin işlenip temizlenmesi ile oluşturulmuş kapsamlı analiz dashboard'u. Dinamik grafikler ile satış trendleri, bölgesel performans ve geleceğe yönelik veri odaklı tahminlemeler.</p>
+                  <ul className="project-tags" aria-label="Kullanılan teknolojiler">
+                    <li className="project-tag">Data Science</li>
+                    <li className="project-tag">Matplotlib</li>
+                    <li className="project-tag">SQL</li>
+                  </ul>
+                </div>
+              </article>
+            </div>
           </div>
         </section>
 
-        <section id="iletisim">
-          <h2>İletişim</h2>
-          <form action="#" method="POST">
-            <fieldset>
-              <legend>İletişim Formu</legend>
+        {/* CONTACT SECTION - LAB-3 Form Gereksinimi Eklendi */}
+        <section id="contact" className="contact">
+          <div className="container">
+            <h2 className="section-title">Bağlantıya Geçin</h2>
+            <p className="section-subtitle">Bir projeniz mi var? Hadi konuşalım!</p>
 
-              <div className="form-group">
-                <label htmlFor="name">Ad Soyad:</label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  required
-                  minLength={2}
-                  placeholder="Adınızı giriniz"
-                  aria-describedby="name-error"
-                />
-                <small id="name-error" className="error-msg" role="alert"></small>
-              </div>
+            {/* LAB-3 Semantic Form yapısı modern tasarıma dahil edildi */}
+            <form className="modern-form" action="#" method="POST" onSubmit={(e) => e.preventDefault()}>
+              <fieldset>
+                <legend className="visually-hidden">İletişim Formu</legend>
 
-              <div className="form-group">
-                <label htmlFor="email">E-posta:</label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  required
-                  placeholder="ornek@mail.com"
-                  aria-describedby="email-error"
-                />
-                <small id="email-error" className="error-msg" role="alert"></small>
-              </div>
+                <div className="form-group">
+                  <label htmlFor="name">Ad Soyad</label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    required
+                    minLength={2}
+                    placeholder="Adınızı giriniz"
+                    aria-describedby="name-error"
+                  />
+                  <small id="name-error" className="error-msg" role="alert"></small>
+                </div>
 
-              <div className="form-group">
-                <label htmlFor="subject">Konu:</label>
-                <select id="subject" name="subject" required aria-describedby="subject-error">
-                  <option value="">-- Seçiniz --</option>
-                  <option value="is">İş Teklifi</option>
-                  <option value="soru">Soru</option>
-                  <option value="oneri">Öneri</option>
-                </select>
-                <small id="subject-error" className="error-msg" role="alert"></small>
-              </div>
+                <div className="form-group">
+                  <label htmlFor="email">E-posta</label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    required
+                    placeholder="ornek@mail.com"
+                    aria-describedby="email-error"
+                  />
+                  <small id="email-error" className="error-msg" role="alert"></small>
+                </div>
 
-              <div className="form-group">
-                <label htmlFor="message">Mesajınız:</label>
-                <textarea
-                  id="message"
-                  name="message"
-                  rows={5}
-                  required
-                  minLength={10}
-                  placeholder="Mesajınızı yazınız (en az 10 karakter)"
-                  aria-describedby="message-error"
-                ></textarea>
-                <small id="message-error" className="error-msg" role="alert"></small>
-              </div>
+                <div className="form-group">
+                  <label htmlFor="subject">Konu</label>
+                  <select id="subject" name="subject" required aria-describedby="subject-error">
+                    <option value="">-- Seçiniz --</option>
+                    <option value="is">İş Teklifi</option>
+                    <option value="soru">Soru</option>
+                    <option value="oneri">Öneri</option>
+                  </select>
+                  <small id="subject-error" className="error-msg" role="alert"></small>
+                </div>
 
-              <button type="submit">Gönder</button>
-            </fieldset>
-          </form>
+                <div className="form-group full-width">
+                  <label htmlFor="message">Mesajınız</label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    rows={5}
+                    required
+                    minLength={10}
+                    placeholder="Mesajınızı yazınız (en az 10 karakter)"
+                    aria-describedby="message-error"
+                  ></textarea>
+                  <small id="message-error" className="error-msg" role="alert"></small>
+                </div>
+
+                <button type="submit" className="btn btn-primary submit-btn">Gönder</button>
+              </fieldset>
+            </form>
+
+            <div className="contact-buttons">
+              <a href="#" className="btn btn-outline" aria-label="LinkedIn Profili">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                LinkedIn
+              </a>
+              <a href="#" className="btn btn-outline" aria-label="GitHub Profili">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                GitHub
+              </a>
+            </div>
+          </div>
         </section>
       </main>
 
+      {/* FOOTER */}
       <footer>
-        <p>&copy; 2025 İlayda Nur Uçar. Tüm hakları saklıdır.</p>
+        <p>&copy; 2026 İlayda Nur Uçar. Tüm hakları saklıdır.</p>
       </footer>
     </>
   )
