@@ -22,7 +22,7 @@ Uygulamanın inşasında tamamen modern web geliştirme standartları göz önü
 - **Doğru Semantik HTML5 Hiyerarşisi:** `<header>`, `<nav>`, `<main>`, `<section>`, `<article>`, ve `<footer>` etiketlerinin standartlara uygun kullanımı.
 - **Erişilebilirlik (A11y) Standartları:** Ekran okuyucular için ARIA etiketleri (`aria-label`, `aria-hidden`), klavye erişimi için `skip link` (Ana içeriğe atla) özelliği ve mantıksal başlık (heading) hiyerarşisi.
 - **Form Doğrulama (Validation):** Kullanıcı deneyimini artıran eş zamanlı frontend form validasyonları (`required`, `minlength`, doğru `type` kullanımları).
-- **Lighthouse Başarısı:** 
+
 
 ### LAB-3 Kapsamı (Modern Tasarım & Responsive Layout)
 - **Design Tokens (Tasarım Değişkenleri):** Proje genelindeki renk, boşluk (`spacing`) ve yazı tipleri için merkezi `:root` CSS değişkenlerinin (`tokens.css`) oluşturulması.
