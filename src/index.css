@@ -1,7 +1,37 @@
-/* index.css - minimal global reset */
-:root {
+/* ========================================
+   GLOBAL STYLES & IMPORTS
+   ======================================== */
+
+/* Design tokens import */
+@import './styles/tokens.css';
+
+/* Genel sifirlama */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: 1.7;
+  color: var(--color-text);
+  background-color: var(--color-bg);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
 }
