@@ -1,73 +1,48 @@
 /* ========================================
    DESIGN TOKENS — Tasarım Değişkenleri
-   Renk skalası: #EB2424 (Kırmızı Portföy Teması)
+   Modern & LAB-3 Uyumlu: Fluid Typography, Semantic Spacing
    ======================================== */
 
 :root {
     /* --- Renk Paleti --- */
-    --color-primary: #EB2424;
-    --color-secondary: #c91f1f;
-    /* Biraz daha koyu kırmızı hover için */
-    --color-accent: #ff4d4d;
-    /* Açık kırmızı vurgu için */
-    --color-bg: #fafafa;
-    --color-text: #1e1e2e;
-    --color-muted: #6b7280;
-    --color-surface: #ffffff;
-    --color-surface-alt: #f9fafb;
-    --color-border: #e5e7eb;
-    --color-error: #EB2424;
-    --color-success: #16a34a;
+    --primary: #EB2424;
+    --primary-dark: #c1121f;
 
-    /* Gradient */
-    --gradient-primary: linear-gradient(135deg, #c91f1f, #EB2424, #ff4d4d);
-    --gradient-button: linear-gradient(135deg, #EB2424, #ff4d4d);
-    --gradient-button-hover: linear-gradient(135deg, #c91f1f, #EB2424);
+    --dark: #1a1a1a;
+    --dark-surface: #2d2d2d;
 
-    /* --- Spacing (Boşluk) Skalası --- */
-    --space-xs: 0.25rem;
-    /* 4px */
-    --space-sm: 0.5rem;
-    /* 8px */
-    --space-md: 1rem;
-    /* 16px */
-    --space-lg: 1.5rem;
-    /* 24px */
-    --space-xl: 2rem;
-    /* 32px */
-    --space-2xl: 3rem;
-    /* 48px */
-    --space-3xl: 4rem;
-    /* 64px */
+    --light: #f8f9fa;
+    --light-surface: #ffffff;
+
+    --text-primary: #2d3436;
+    --text-secondary: #636e72;
+    --text-inverse: #ffffff;
+
+    --border: #e2e8f0;
+    --border-focus: #EB2424;
+
+    /* --- Spacing Skalası (Fluid / Rem) --- */
+    --space-xs: clamp(0.25rem, 0.2rem + 0.25vw, 0.5rem);
+    --space-sm: clamp(0.5rem, 0.4rem + 0.5vw, 0.75rem);
+    --space-md: clamp(1rem, 0.8rem + 1vw, 1.5rem);
+    --space-lg: clamp(1.5rem, 1.2rem + 1.5vw, 2.5rem);
+    --space-xl: clamp(2rem, 1.5rem + 2.5vw, 4rem);
+    --space-2xl: clamp(4rem, 3rem + 5vw, 8rem);
 
     /* --- Border Radius --- */
     --radius-sm: 4px;
-    --radius-md: 10px;
-    --radius-lg: 14px;
+    --radius-md: 8px;
+    --radius-lg: 16px;
     --radius-full: 9999px;
 
     /* --- Font Aileleri --- */
-    --font-sans: 'Poppins', system-ui, -apple-system, sans-serif;
-    --font-mono: 'Fira Code', 'Consolas', monospace;
+    --font-sans: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 
-    /* --- Font Boyutları (Fluid Typography — clamp) --- */
-    --text-sm: clamp(0.8rem, 0.75rem + 0.25vw, 0.9rem);
-    --text-base: clamp(0.95rem, 0.85rem + 0.5vw, 1.05rem);
-    --text-lg: clamp(1.05rem, 0.95rem + 0.5vw, 1.2rem);
-    --text-xl: clamp(1.15rem, 0.95rem + 1vw, 1.5rem);
-    --text-2xl: clamp(1.5rem, 1.1rem + 2vw, 2rem);
-    --text-3xl: clamp(2rem, 1.4rem + 3vw, 2.8rem);
-
-    /* --- Gölge --- */
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
-    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
-    --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.04);
-    --shadow-card-hover: 0 8px 24px rgba(0, 0, 0, 0.08);
-    --shadow-button: 0 4px 12px rgba(235, 36, 36, 0.25);
-    --shadow-button-hover: 0 6px 20px rgba(235, 36, 36, 0.35);
-
-    /* --- Geçiş --- */
-    --transition-fast: 150ms ease;
-    --transition-normal: 300ms ease;
+    /* --- Font Boyutları (Fluid Typography — LAB-3) --- */
+    --text-sm: clamp(0.8rem, 0.75rem + 0.2vw, 0.95rem);
+    --text-base: clamp(1rem, 0.95rem + 0.3vw, 1.1rem);
+    --text-lg: clamp(1.1rem, 1rem + 0.5vw, 1.3rem);
+    --text-xl: clamp(1.3rem, 1.2rem + 0.8vw, 1.6rem);
+    --text-2xl: clamp(1.8rem, 1.5rem + 2vw, 2.6rem);
+    --text-3xl: clamp(2.5rem, 2rem + 3vw, 4rem);
 }
