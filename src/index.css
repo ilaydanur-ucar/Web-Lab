@@ -1,46 +1,150 @@
-@import './styles/tokens.css';
+@import "tailwindcss";
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+/* =============================================
+   Tailwind v4 — Dark Mode Selector Strategy
+   ============================================= */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* =============================================
+   Tailwind v4 — @theme ile Design Token'lar
+   (tokens.css'ten taşındı, Tailwind convention'a uygun)
+   ============================================= */
+@theme {
+  /* --- Renk Paleti --- */
+  --color-primary: #EB2424;
+  --color-primary-dark: #c1121f;
+  --color-primary-light: #ffe5e5;
+
+  --color-dark: #1a1a1a;
+  --color-dark-surface: #2d2d2d;
+
+  --color-light: #f8f9fa;
+  --color-light-surface: #ffffff;
+
+  --color-text-primary: #2d3436;
+  --color-text-secondary: #636e72;
+  --color-text-inverse: #ffffff;
+
+  --color-border: #e2e8f0;
+  --color-border-focus: #EB2424;
+
+  --color-info: #3b82f6;
+  --color-success: #16a34a;
+  --color-warning: #f59e0b;
+  --color-error: #dc2626;
+
+  /* --- Font Aileleri --- */
+  --font-sans: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --font-mono: 'Fira Code', 'Consolas', monospace;
+
+  /* --- Keyframe Animasyonları --- */
+  --animate-slide-in-left: slide-in-left 0.6s ease-out;
+  --animate-slide-in-right: slide-in-right 0.6s ease-out forwards;
+  --animate-slide-in-up: slide-in-up 0.8s ease-out;
+  --animate-fade-in: fade-in 1s ease-out;
+  --animate-fade-in-up: fade-in-up 0.6s ease-out forwards;
+  --animate-float: float 3s ease-in-out infinite;
+  --animate-rotate: rotate-loop 8s linear infinite;
+  --animate-shine: shine 3s infinite;
+
+  @keyframes slide-in-left {
+    from {
+      opacity: 0;
+      transform: translateX(-30px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slide-in-right {
+    from {
+      opacity: 0;
+      transform: translateX(30px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slide-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes float {
+
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+
+  @keyframes rotate-loop {
+    from {
+      transform: rotate(0deg);
+    }
+
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes shine {
+    0% {
+      transform: translateX(-100%) translateY(-100%) rotate(45deg);
+    }
+
+    100% {
+      transform: translateX(100%) translateY(100%) rotate(45deg);
+    }
+  }
 }
 
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: var(--text-primary);
-  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-  overflow-x: hidden;
-  line-height: 1.6;
-}
-
+/* =============================================
+   Tailwind v4 — Minimal Global Stiller
+   ============================================= */
 html {
   scroll-behavior: smooth;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-/* Accessibility */
-:focus {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
-}
-
-.skip-link {
-  position: absolute;
-  top: -100px;
-  left: 0;
-  background: var(--primary);
-  color: white;
-  padding: 8px 16px;
-  z-index: 1000;
-  font-weight: bold;
-  border-radius: 0 0 8px 0;
-  text-decoration: none;
-}
-
-.skip-link:focus {
-  top: 0;
 }
