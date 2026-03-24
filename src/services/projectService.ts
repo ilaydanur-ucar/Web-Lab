@@ -16,7 +16,9 @@ export async function fetchProjects(): Promise<Project[]> {
     return data;
 
   } catch (error) {
-    console.error("Veri cekme hatasi:", error);
+    if (import.meta.env.DEV) {
+      console.error("Veri cekme hatasi:", error);
+    }
     throw error;
   }
 }
