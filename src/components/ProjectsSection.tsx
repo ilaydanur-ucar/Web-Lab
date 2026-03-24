@@ -1,14 +1,9 @@
 import { useState } from 'react'
-import type { Project, Category, SortField, SortOrder } from '../types/project'
-import { applyFilters } from '../utils/projectHelpers'
+import type { Project } from '../types/project'
 import { isValidExternalUrl } from '../utils/security'
 import { CATEGORY_LABELS } from '../constants/navigation'
 import { useFetchProjects } from '../hooks/useFetchProjects'
-import Button from './Button'
-import Input from './Input'
 import Alert from './Alert'
-
-const CATEGORIES: (Category | 'all')[] = ['all', 'frontend', 'fullstack', 'backend']
 
 function ProjectCard({ project, index }: { project: Project; index: number }) {
   const [expanded, setExpanded] = useState(false)
@@ -23,9 +18,9 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
   ]
 
   return (
-    <article
-      className="animate-on-scroll opacity-0 translate-y-8 transition-all duration-700 [&.is-visible]:opacity-100 [&.is-visible]:translate-y-0"
-      style={{ transitionDelay: `${index * 100}ms` }}
+    <div
+      className="opacity-0 animate-fade-in-up"
+      style={{ animationDelay: `${index * 120}ms`, animationFillMode: 'forwards' }}
     >
       <div className="h-full bg-white dark:bg-gray-800 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-2 overflow-hidden border border-gray-100 dark:border-gray-700 group flex flex-col">
         {/* Gradient banner */}
@@ -59,7 +54,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             {project.description}
           </p>
 
-          {/* Detay alanı — açılır/kapanır */}
+          {/* Detay alanı */}
           {(project.problem || project.solution || project.role) && (
             <>
               <button
@@ -134,24 +129,18 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           </div>
         </div>
       </div>
-    </article>
+    </div>
   )
 }
 
 export default function ProjectsSection() {
   const { projects, loading, error } = useFetchProjects()
-  const [search, setSearch] = useState('')
-  const [category, setCategory] = useState<Category | 'all'>('all')
-  const [sortField, setSortField] = useState<SortField>('year')
-  const [sortOrder, setSortOrder] = useState<SortOrder>('desc')
-
-  const filtered = applyFilters(projects, search, category, sortField, sortOrder)
 
   return (
     <section id="projects" className="py-20 sm:py-28 px-4 sm:px-8 bg-gray-50 dark:bg-gray-900">
       <div className="max-w-6xl mx-auto">
         {/* Başlık */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-14">
           <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-3">
             Projelerim
           </h2>
@@ -169,49 +158,6 @@ export default function ProjectsSection() {
           </div>
         )}
 
-        {/* Filtreler */}
-        <div className="flex flex-col lg:flex-row gap-4 mb-10 p-5 bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700">
-          <div className="flex-1">
-            <Input
-              id="search"
-              placeholder="Proje ara... (başlık, açıklama, teknoloji)"
-              value={search}
-              onChange={e => setSearch(e.target.value)}
-            />
-          </div>
-
-          <div className="flex gap-2 flex-wrap items-end">
-            {CATEGORIES.map(cat => (
-              <Button
-                key={cat}
-                variant={category === cat ? 'primary' : 'ghost'}
-                size="sm"
-                onClick={() => setCategory(cat)}
-              >
-                {CATEGORY_LABELS[cat]}
-              </Button>
-            ))}
-          </div>
-
-          <div className="flex gap-2 items-end">
-            <select
-              value={sortField}
-              onChange={e => setSortField(e.target.value as SortField)}
-              className="border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
-            >
-              <option value="year">Yıl</option>
-              <option value="title">Başlık</option>
-            </select>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setSortOrder(o => o === 'asc' ? 'desc' : 'asc')}
-            >
-              {sortOrder === 'asc' ? '↑ Eskiden Yeniye' : '↓ Yeniden Eskiye'}
-            </Button>
-          </div>
-        </div>
-
         {/* Yükleniyor */}
         {loading && (
           <div className="flex justify-center py-20">
@@ -222,34 +168,19 @@ export default function ProjectsSection() {
           </div>
         )}
 
-        {/* Boş sonuç */}
-        {!loading && filtered.length === 0 && !error && (
-          <div className="text-center py-20">
-            <p className="text-gray-400 dark:text-gray-500 text-lg mb-2">
-              Eşleşen proje bulunamadı.
-            </p>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="mt-2"
-              onClick={() => { setSearch(''); setCategory('all') }}
-            >
-              Filtreleri Temizle
-            </Button>
+        {/* Proje listesi */}
+        {!loading && !error && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {projects.map((project, index) => (
+              <ProjectCard key={project.id} project={project} index={index} />
+            ))}
           </div>
         )}
 
-        {/* Proje listesi */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filtered.map((project, index) => (
-            <ProjectCard key={project.id} project={project} index={index} />
-          ))}
-        </div>
-
         {/* Sonuç sayısı */}
-        {!loading && (
+        {!loading && projects.length > 0 && (
           <p className="text-sm text-gray-400 mt-8 text-center">
-            {filtered.length} / {projects.length} proje gösteriliyor
+            {projects.length} proje gösteriliyor
           </p>
         )}
       </div>
