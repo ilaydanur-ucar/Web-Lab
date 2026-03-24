@@ -1,4 +1,7 @@
 import { useEffect, useState } from 'react'
+import type { Project, Category, SortField, SortOrder } from './types/project'
+import { fetchProjects } from './services/projectService'
+import { applyFilters } from './utils/projectHelpers'
 import Button from './components/Button'
 import Input from './components/Input'
 import Alert from './components/Alert'
@@ -9,7 +12,53 @@ function App() {
   const [currentPage, setCurrentPage] = useState<'portfolio' | 'uikit'>('portfolio')
   const [formSubmitted, setFormSubmitted] = useState(false)
 
-  // Scroll animations — class-based toggle (Tailwind çakışmasını önler)
+  // --- PROJECT STATE ---
+  const [projects, setProjects] = useState<Project[]>([])
+  const [search, setSearch] = useState('')
+  const [category, setCategory] = useState<Category | 'all'>('all')
+  const [sortField, setSortField] = useState<SortField>('year')
+  const [sortOrder, setSortOrder] = useState<SortOrder>('desc')
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  // --- VERI CEKME ---
+  useEffect(() => {
+    async function load() {
+      try {
+        setLoading(true)
+        setError(null)
+        const data = await fetchProjects()
+        setProjects(data)
+      } catch (err) {
+        setError(
+          err instanceof Error
+            ? err.message
+            : 'Bilinmeyen hata'
+        )
+      } finally {
+        setLoading(false)
+      }
+    }
+    load()
+  }, [])
+
+  // --- TURETILMIS (DERIVED) VERI ---
+  const filtered = applyFilters(
+    projects, search, category,
+    sortField, sortOrder
+  )
+
+  const categories: (Category | 'all')[] =
+    ['all', 'frontend', 'fullstack', 'backend']
+
+  const categoryLabels: Record<Category | 'all', string> = {
+    all: 'Tumu',
+    frontend: 'Frontend',
+    fullstack: 'Full Stack',
+    backend: 'Backend',
+  }
+
+  // Scroll animations
   useEffect(() => {
     if (currentPage !== 'portfolio') return
 
@@ -43,27 +92,25 @@ function App() {
     document.documentElement.classList.toggle('dark')
   }
 
-  // ─── UI Kit Sayfası ───
+  // ─── UI Kit Sayfasi ───
   if (currentPage === 'uikit') {
     return (
       <div className="min-h-screen bg-white dark:bg-gray-950">
-        {/* Dark Mode Toggle */}
         <button
           onClick={toggleDarkMode}
           className="fixed top-4 right-4 z-50 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 p-2 rounded-full shadow-lg hover:scale-110 transition-transform cursor-pointer"
-          aria-label="Tema değiştir"
+          aria-label="Tema degistir"
         >
           <span className="dark:hidden">&#9790;</span>
           <span className="hidden dark:inline">&#9728;</span>
         </button>
 
-        {/* Geri butonu */}
         <div className="p-4">
           <button
             onClick={() => setCurrentPage('portfolio')}
             className="text-primary hover:text-primary-dark font-medium transition-colors cursor-pointer"
           >
-            ← Portföye Dön
+            ← Portfoye Don
           </button>
         </div>
 
@@ -72,36 +119,34 @@ function App() {
     )
   }
 
-  // ─── Portföy Sayfası ───
+  // ─── Portfolyo Sayfasi ───
   return (
     <>
-      {/* Dark Mode Toggle — Fixed */}
+      {/* Dark Mode Toggle */}
       <button
         onClick={toggleDarkMode}
         className="fixed top-4 right-4 z-50 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 p-2 rounded-full shadow-lg hover:scale-110 transition-transform cursor-pointer"
-        aria-label="Tema değiştir"
+        aria-label="Tema degistir"
       >
         <span className="dark:hidden">&#9790;</span>
         <span className="hidden dark:inline">&#9728;</span>
       </button>
 
-      {/* Skip Link — A11y */}
+      {/* Skip Link */}
       <a
         href="#main-content"
         className="sr-only focus:not-sr-only focus:absolute focus:top-0 focus:left-0 bg-primary text-white p-2 z-50"
       >
-        Ana içeriğe atla
+        Ana icerage atla
       </a>
 
       {/* ═══ NAVBAR ═══ */}
       <header className="sticky top-0 z-40 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-b-2 border-gray-200 dark:border-gray-700 shadow-sm">
         <div className="max-w-6xl mx-auto px-4 py-3 flex flex-col sm:flex-row justify-between items-center gap-3">
-          {/* Logo */}
           <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary-dark bg-clip-text text-transparent animate-slide-in-left">
-            İU
+            IU
           </h1>
 
-          {/* Navigasyon */}
           <nav aria-label="Ana navigasyon">
             <ul className="flex flex-wrap gap-2">
               <li>
@@ -110,7 +155,7 @@ function App() {
                   onClick={(e) => handleSmoothScroll(e, '#about')}
                   className="px-3 py-1 rounded-md text-gray-700 dark:text-gray-300 hover:bg-primary-light dark:hover:bg-gray-800 transition-colors"
                 >
-                  Hakkımda
+                  Hakkimda
                 </a>
               </li>
               <li>
@@ -128,7 +173,7 @@ function App() {
                   onClick={(e) => handleSmoothScroll(e, '#contact')}
                   className="px-3 py-1 rounded-md text-gray-700 dark:text-gray-300 hover:bg-primary-light dark:hover:bg-gray-800 transition-colors"
                 >
-                  İletişim
+                  Iletisim
                 </a>
               </li>
               <li>
@@ -147,19 +192,18 @@ function App() {
       <main id="main-content" className="bg-white dark:bg-gray-950">
         {/* ═══ HERO SECTION ═══ */}
         <section className="min-h-[auto] lg:min-h-[85vh] grid grid-cols-1 lg:grid-cols-2 items-center gap-8 px-4 sm:px-8 py-16 lg:py-24 max-w-[1400px] mx-auto">
-          {/* Hero içerik */}
           <div className="animate-slide-in-up">
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-4 text-gray-900 dark:text-white">
               Merhaba! Ben{' '}
               <span className="bg-gradient-to-r from-primary to-primary-dark bg-clip-text text-transparent">
-                İlayda
+                Ilayda
               </span>
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">
-              Yazılım Mühendisliği öğrencisi, yazılım geliştirici ve veri bilimci.
-              Verileri analiz etmek, makine öğrenmesi modelleri eğitmek ve yapay zeka
-              çözümleri üretme üzerine çalışıyorum. Yenilikçi analitik projelerle
-              gerçek dünya problemlerine çözüm buluyorum.
+              Yazilim Muhendisligi ogrencisi, yazilim gelistirici ve veri bilimci.
+              Verileri analiz etmek, makine ogrenmesi modelleri egitmek ve yapay zeka
+              cozumleri uretme uzerine calisiyorum. Yenilikci analitik projelerle
+              gercek dunya problemlerine cozum buluyorum.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <a
@@ -167,22 +211,21 @@ function App() {
                 onClick={(e) => handleSmoothScroll(e, '#projects')}
                 className="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-primary to-primary-dark text-white font-semibold rounded-lg shadow-lg shadow-primary/30 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/40 transition-all"
               >
-                Projelerimi Gör
+                Projelerimi Gor
               </a>
               <a
                 href="#contact"
                 onClick={(e) => handleSmoothScroll(e, '#contact')}
                 className="inline-flex items-center justify-center px-6 py-3 bg-white dark:bg-gray-800 text-primary border-2 border-primary font-semibold rounded-lg hover:bg-primary-light dark:hover:bg-gray-700 hover:-translate-y-1 transition-all"
               >
-                Bana Ulaş
+                Bana Ulas
               </a>
             </div>
           </div>
 
-          {/* Avatar */}
           <div className="order-first lg:order-last flex justify-center animate-fade-in" aria-hidden="true">
             <div className="w-[clamp(200px,20vw,350px)] h-[clamp(200px,20vw,350px)] rounded-full bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center text-white text-[clamp(60px,8vw,120px)] font-bold shadow-2xl shadow-primary/30 animate-float relative">
-              İU
+              IU
               <div className="absolute inset-[-10px] rounded-full bg-gradient-to-br from-primary to-transparent opacity-20 animate-rotate" />
             </div>
           </div>
@@ -192,33 +235,31 @@ function App() {
         <section id="about" className="py-16 sm:py-24 px-4 sm:px-8 bg-white dark:bg-gray-950">
           <div className="max-w-[1400px] mx-auto">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-2 relative inline-block after:content-[''] after:absolute after:bottom-[-10px] after:left-0 after:h-1 after:w-20 after:bg-primary after:rounded">
-              Hakkımda
+              Hakkimda
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-400 mt-4 mb-12">
-              Kim olduğum ve neler yapabileceğim
+              Kim oldugum ve neler yapabilecegim
             </p>
 
             <div className="animate-on-scroll opacity-0 translate-y-8 transition-all duration-700 [&.is-visible]:opacity-100 [&.is-visible]:translate-y-0 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start">
-              {/* Metin */}
               <div>
                 <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-6">
-                  Yazılım Mühendisliği bölümünde eğitim alan, analitik düşünmeyi ve
-                  verilerden anlamlı sonuçlar çıkarmayı hedefleyen bir geliştiriciyim.
-                  Temel yazılım geliştirme prensiplerine hakim olmakla beraber, asıl
-                  uzmanlık alanımı Veri Bilimi (Data Science), Makine Öğrenmesi
-                  (Machine Learning) ve Yapay Zeka (AI) oluşturuyor.
+                  Yazilim Muhendisligi bolumunde egitim alan, analitik dusunmeyi ve
+                  verilerden anlamli sonuclar cikarmayi hedefleyen bir gelisitriciyim.
+                  Temel yazilim gelistirme prensiplerine hakim olmakla beraber, asil
+                  uzmanlik alanini Veri Bilimi (Data Science), Makine Ogrenmesi
+                  (Machine Learning) ve Yapay Zeka (AI) olusturuyor.
                 </p>
                 <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                  Büyük veri setlerini işlemek, istatistiksel modeller oluşturmak ve
-                  yapay zeka çözümleri geliştirmek üzerine projeler üretiyorum.
-                  Amacım, karmaşık verileri işlenebilir öngörülere dönüştürmek.
+                  Buyuk veri setlerini islemek, istatistiksel modeller olusturmak ve
+                  yapay zeka cozumleri gelistirmek uzerine projeler uretiyorum.
+                  Amacim, karmasik verileri islenebilir ongorulere donusturmek.
                 </p>
               </div>
 
-              {/* Teknolojiler */}
               <div>
                 <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-                  Kullandığım Teknolojiler
+                  Kullandigim Teknolojiler
                 </h3>
                 <ul className="flex flex-wrap gap-4 mt-4" aria-label="Beceri etiketleri">
                   {[
@@ -249,94 +290,170 @@ function App() {
           </div>
         </section>
 
-        {/* ═══ PROJECTS SECTION ═══ */}
+        {/* ═══ PROJECTS SECTION — STATE-BASED ═══ */}
         <section id="projects" className="py-16 sm:py-24 px-4 sm:px-8 bg-gray-50 dark:bg-gray-900">
           <div className="max-w-6xl mx-auto">
-            <h2 className="text-3xl sm:text-4xl font-bold text-center text-gray-900 dark:text-white mb-2 relative inline-block after:content-[''] after:absolute after:bottom-[-10px] after:left-0 after:h-1 after:w-20 after:bg-primary after:rounded">
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-2 relative inline-block after:content-[''] after:absolute after:bottom-[-10px] after:left-0 after:h-1 after:w-20 after:bg-primary after:rounded">
               Projelerim
             </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-400 mt-4 mb-12">
-              Gerçekleştirdiğim ve öğrendiğim projeler
+            <p className="text-lg text-gray-600 dark:text-gray-400 mt-4 mb-8">
+              Gerceklestirdigim ve ogrendigim projeler
             </p>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {/* Proje 1 */}
-              <article className="animate-on-scroll opacity-0 translate-y-8 transition-all duration-700 [&.is-visible]:opacity-100 [&.is-visible]:translate-y-0">
-                <Card variant="elevated" className="h-full hover:-translate-y-2 hover:shadow-xl transition-all">
-                  <div className="h-[200px] bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center text-white text-2xl font-bold relative overflow-hidden">
-                    ElektrAize
-                    <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent animate-shine" />
-                  </div>
-                  <div className="p-5">
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
-                      ElektrAize
-                    </h3>
-                    <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-4">
-                      81 il bazlı enerji tüketimi, tahminleme ve anomali tespit sistemi.
-                    </p>
-                    <ul className="flex flex-wrap gap-2" aria-label="Kullanılan teknolojiler">
-                      <li className="bg-primary-light dark:bg-primary/20 text-primary px-3 py-1 rounded-full text-sm font-semibold">
-                        Python
-                      </li>
-                    </ul>
-                  </div>
-                </Card>
-              </article>
+            {/* HATA DURUMU */}
+            {error && (
+              <div className="mb-6">
+                <Alert variant="error" title="Hata">
+                  {error}
+                </Alert>
+              </div>
+            )}
 
-              {/* Proje 2 */}
-              <article className="animate-on-scroll opacity-0 translate-y-8 transition-all duration-700 delay-100 [&.is-visible]:opacity-100 [&.is-visible]:translate-y-0">
-                <Card variant="elevated" className="h-full hover:-translate-y-2 hover:shadow-xl transition-all">
-                  <div className="h-[200px] bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center text-white text-2xl font-bold relative overflow-hidden">
-                    LiveKit Agents
-                    <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent animate-shine" />
-                  </div>
-                  <div className="p-5">
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
-                      python-agents-examples
-                    </h3>
-                    <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-4">
-                      Forked from livekit-examples/python-agents-examples. Comprehensive
-                      collection of examples for LiveKit Agents with Python.
-                    </p>
-                    <ul className="flex flex-wrap gap-2" aria-label="Kullanılan teknolojiler">
-                      <li className="bg-primary-light dark:bg-primary/20 text-primary px-3 py-1 rounded-full text-sm font-semibold">
-                        TypeScript
-                      </li>
-                      <li className="bg-primary-light dark:bg-primary/20 text-primary px-3 py-1 rounded-full text-sm font-semibold">
-                        Python
-                      </li>
-                    </ul>
-                  </div>
-                </Card>
-              </article>
+            {/* FILTRELER */}
+            <div className="flex flex-col lg:flex-row gap-4 mb-8 p-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+              {/* Arama */}
+              <div className="flex-1">
+                <Input
+                  id="search"
+                  placeholder="Proje ara... (baslik, aciklama, teknoloji)"
+                  value={search}
+                  onChange={e => setSearch(e.target.value)}
+                />
+              </div>
 
-              {/* Proje 3 */}
-              <article className="animate-on-scroll opacity-0 translate-y-8 transition-all duration-700 delay-200 [&.is-visible]:opacity-100 [&.is-visible]:translate-y-0">
-                <Card variant="elevated" className="h-full hover:-translate-y-2 hover:shadow-xl transition-all">
-                  <div className="h-[200px] bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center text-white text-2xl font-bold relative overflow-hidden">
-                    WindSentinel
-                    <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent animate-shine" />
-                  </div>
-                  <div className="p-5">
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
-                      WindSentinel
-                    </h3>
-                    <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-4">
-                      Event-Driven Microservice Architecture for Early Fault Detection
-                      in Wind Turbines Using SCADA Data and Field Measurements.
-                    </p>
-                    <ul className="flex flex-wrap gap-2" aria-label="Kullanılan teknolojiler">
-                      <li className="bg-primary-light dark:bg-primary/20 text-primary px-3 py-1 rounded-full text-sm font-semibold">
-                        Microservices
-                      </li>
-                      <li className="bg-primary-light dark:bg-primary/20 text-primary px-3 py-1 rounded-full text-sm font-semibold">
-                        SCADA
-                      </li>
-                    </ul>
-                  </div>
-                </Card>
-              </article>
+              {/* Kategori filtreleri */}
+              <div className="flex gap-2 flex-wrap items-end">
+                {categories.map(cat => (
+                  <Button
+                    key={cat}
+                    variant={category === cat ? 'primary' : 'ghost'}
+                    size="sm"
+                    onClick={() => setCategory(cat)}
+                  >
+                    {categoryLabels[cat]}
+                  </Button>
+                ))}
+              </div>
+
+              {/* Siralama */}
+              <div className="flex gap-2 items-end">
+                <select
+                  value={sortField}
+                  onChange={e => setSortField(e.target.value as SortField)}
+                  className="border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
+                >
+                  <option value="year">Yil</option>
+                  <option value="title">Baslik</option>
+                </select>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setSortOrder(
+                    o => o === 'asc' ? 'desc' : 'asc'
+                  )}
+                >
+                  {sortOrder === 'asc' ? '↑ A-Z' : '↓ Z-A'}
+                </Button>
+              </div>
             </div>
+
+            {/* YUKLENIYOR */}
+            {loading && (
+              <div className="flex justify-center py-16">
+                <div className="flex flex-col items-center gap-4">
+                  <div className="w-12 h-12 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
+                  <p className="text-gray-500 dark:text-gray-400">Projeler yukleniyor...</p>
+                </div>
+              </div>
+            )}
+
+            {/* BOS SONUC */}
+            {!loading && filtered.length === 0 && !error && (
+              <div className="text-center py-16">
+                <p className="text-2xl mb-2">🔍</p>
+                <p className="text-gray-500 dark:text-gray-400 text-lg">
+                  Eslesen proje bulunamadi.
+                </p>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="mt-4"
+                  onClick={() => { setSearch(''); setCategory('all') }}
+                >
+                  Filtreleri Temizle
+                </Button>
+              </div>
+            )}
+
+            {/* PROJE LISTESI */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filtered.map((project, index) => (
+                <article
+                  key={project.id}
+                  className="animate-on-scroll opacity-0 translate-y-8 transition-all duration-700 [&.is-visible]:opacity-100 [&.is-visible]:translate-y-0"
+                  style={{ transitionDelay: `${index * 100}ms` }}
+                >
+                  <Card variant="elevated" className="h-full hover:-translate-y-2 hover:shadow-xl transition-all group">
+                    {/* Gradient banner */}
+                    <div className="h-[180px] bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center text-white text-xl font-bold relative overflow-hidden">
+                      {project.title}
+                      <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent animate-shine" />
+                      {/* Featured badge */}
+                      {project.featured && (
+                        <span className="absolute top-3 right-3 bg-white/20 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-full font-medium">
+                          One Cikan
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="p-5">
+                      <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2 group-hover:text-primary transition-colors">
+                        {project.title}
+                      </h3>
+                      <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-4">
+                        {project.description}
+                      </p>
+
+                      {/* Teknoloji etiketleri */}
+                      <ul className="flex flex-wrap gap-2 mb-4" aria-label="Kullanilan teknolojiler">
+                        {project.tech.map(t => (
+                          <li
+                            key={t}
+                            className="bg-primary-light dark:bg-primary/20 text-primary dark:text-red-300 px-3 py-1 rounded-full text-xs font-semibold"
+                          >
+                            {t}
+                          </li>
+                        ))}
+                      </ul>
+
+                      {/* Alt bilgi */}
+                      <div className="flex items-center justify-between pt-3 border-t border-gray-100 dark:border-gray-700">
+                        <span className="text-xs text-gray-400">
+                          {project.year} &middot; {categoryLabels[project.category]}
+                        </span>
+                        {project.sourceUrl && (
+                          <a
+                            href={project.sourceUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-xs text-primary hover:text-primary-dark font-medium transition-colors"
+                          >
+                            GitHub →
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  </Card>
+                </article>
+              ))}
+            </div>
+
+            {/* SONUC SAYISI */}
+            {!loading && (
+              <p className="text-sm text-gray-500 dark:text-gray-400 mt-6 text-center">
+                {filtered.length} / {projects.length} proje gosteriliyor
+              </p>
+            )}
           </div>
         </section>
 
@@ -344,27 +461,25 @@ function App() {
         <section id="contact" className="dark py-16 sm:py-24 px-4 sm:px-8 bg-gradient-to-br from-dark to-dark-surface text-white">
           <div className="max-w-[1400px] mx-auto">
             <h2 className="text-3xl sm:text-4xl font-bold text-white text-center mb-2 relative inline-block mx-auto block w-max after:content-[''] after:absolute after:bottom-[-10px] after:left-1/2 after:-translate-x-1/2 after:h-1 after:w-20 after:bg-primary after:rounded">
-              Bağlantıya Geçin
+              Baglantiya Gecin
             </h2>
             <p className="text-lg text-gray-400 text-center mt-4 mb-12">
-              Bir projeniz mi var? Hadi konuşalım!
+              Bir projeniz mi var? Hadi konusalim!
             </p>
 
-            {/* Alert — Form gönderim bildirimi */}
             {formSubmitted && (
               <div className="max-w-[800px] mx-auto mb-8">
                 <Alert
                   variant="success"
-                  title="Mesajınız Gönderildi!"
+                  title="Mesajiniz Gonderildi!"
                   dismissible
                   onDismiss={() => setFormSubmitted(false)}
                 >
-                  En kısa sürede size dönüş yapacağım. Teşekkürler!
+                  En kisa surede size donus yapacagim. Tesekkurler!
                 </Alert>
               </div>
             )}
 
-            {/* Form — Input ve Button componentleri kullanılıyor */}
             <form
               className="max-w-[800px] mx-auto"
               action="#"
@@ -375,18 +490,16 @@ function App() {
               }}
             >
               <fieldset className="border-none p-0 grid grid-cols-1 md:grid-cols-2 gap-6">
-                <legend className="sr-only">İletişim Formu</legend>
+                <legend className="sr-only">Iletisim Formu</legend>
 
-                {/* Input Component — Ad Soyad */}
                 <Input
                   id="name"
                   label="Ad Soyad"
                   type="text"
                   required
-                  placeholder="Adınızı giriniz"
+                  placeholder="Adinizi giriniz"
                 />
 
-                {/* Input Component — E-posta */}
                 <Input
                   id="email"
                   label="E-posta"
@@ -396,7 +509,6 @@ function App() {
                   helpText="E-posta adresinizi girin"
                 />
 
-                {/* Select (Input component'i select desteklemediği için doğrudan) */}
                 <div className="space-y-1">
                   <label htmlFor="subject" className="block text-sm font-medium text-gray-300">
                     Konu
@@ -407,17 +519,16 @@ function App() {
                     required
                     className="w-full px-3 py-2 rounded-lg border border-gray-600 bg-gray-800 text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary transition-colors [&>option]:bg-gray-800 [&>option]:text-white"
                   >
-                    <option value="">-- Seçiniz --</option>
-                    <option value="is">İş Teklifi</option>
+                    <option value="">-- Seciniz --</option>
+                    <option value="is">Is Teklifi</option>
                     <option value="soru">Soru</option>
-                    <option value="oneri">Öneri</option>
+                    <option value="oneri">Oneri</option>
                   </select>
                 </div>
 
-                {/* Textarea (not Input component but styled consistently) */}
                 <div className="space-y-1 md:col-span-2">
                   <label htmlFor="message" className="block text-sm font-medium text-gray-300">
-                    Mesajınız
+                    Mesajiniz
                   </label>
                   <textarea
                     id="message"
@@ -425,25 +536,25 @@ function App() {
                     rows={5}
                     required
                     minLength={10}
-                    placeholder="Mesajınızı yazınız (en az 10 karakter)"
+                    placeholder="Mesajinizi yaziniz (en az 10 karakter)"
                     aria-describedby="message-error"
                     className="w-full px-3 py-2 rounded-lg border border-gray-600 bg-gray-800 text-gray-100 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-primary transition-colors resize-y"
                   />
                 </div>
 
-                {/* Button Component — Gönder */}
                 <div className="md:col-span-2">
                   <Button variant="primary" size="lg" type="submit" className="w-full sm:w-auto">
-                    Gönder
+                    Gonder
                   </Button>
                 </div>
               </fieldset>
             </form>
 
-            {/* Sosyal linkler */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-stretch mt-8 pt-8 border-t border-white/10">
               <a
-                href="#"
+                href="https://www.linkedin.com/in/ilaydanurucar/"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white/5 text-white border border-white/30 rounded-lg font-semibold hover:bg-white/15 hover:border-white hover:-translate-y-1 hover:shadow-lg transition-all"
                 aria-label="LinkedIn Profili"
               >
@@ -455,7 +566,9 @@ function App() {
                 LinkedIn
               </a>
               <a
-                href="#"
+                href="https://github.com/ilaydanur-ucar"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white/5 text-white border border-white/30 rounded-lg font-semibold hover:bg-white/15 hover:border-white hover:-translate-y-1 hover:shadow-lg transition-all"
                 aria-label="GitHub Profili"
               >
@@ -471,7 +584,7 @@ function App() {
 
       {/* ═══ FOOTER ═══ */}
       <footer className="bg-gray-100 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 text-center py-6 px-4 text-gray-500 dark:text-gray-400 text-sm">
-        <p>&copy; 2026 İlayda Nur Uçar. Tüm hakları saklıdır.</p>
+        <p>&copy; 2026 Ilayda Nur Ucar. Tum haklari saklidir.</p>
       </footer>
     </>
   )
