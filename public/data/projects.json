@@ -1,0 +1,68 @@
+[
+  {
+    "id": 1,
+    "title": "ElektrAize",
+    "description": "81 il bazli enerji tuketimi, tahminleme ve anomali tespit sistemi. Makine ogrenmesi ile tuketim tahminleri ve anormal tuketim tespiti.",
+    "tech": ["Python", "TensorFlow", "Pandas", "FastAPI"],
+    "year": 2025,
+    "category": "fullstack",
+    "featured": true,
+    "image": "/images/elektraize.jpg",
+    "sourceUrl": "https://github.com/ilaydanur-ucar/ElektrAize"
+  },
+  {
+    "id": 2,
+    "title": "WindSentinel",
+    "description": "Event-Driven Microservice mimarisi ile ruzgar turbinlerinde erken ariza tespiti. SCADA verileri ve saha olcumleri kullanilarak gercek zamanli izleme.",
+    "tech": ["Python", "Docker", "Kafka", "PostgreSQL"],
+    "year": 2026,
+    "category": "backend",
+    "featured": true,
+    "image": "/images/windsentinel.jpg",
+    "sourceUrl": "https://github.com/ilaydanur-ucar/WindSentinel"
+  },
+  {
+    "id": 3,
+    "title": "LiveKit Agents",
+    "description": "LiveKit platformu uzerinde Python ile gelistirilmis kisisel alisveris asistani. Gercek zamanli sesli etkilesim ve yapay zeka destekli oneri sistemi.",
+    "tech": ["Python", "LiveKit", "TypeScript", "AI"],
+    "year": 2025,
+    "category": "backend",
+    "featured": true,
+    "image": "/images/livekit.jpg",
+    "sourceUrl": "https://github.com/ilaydanur-ucar/Livekit-python-agent"
+  },
+  {
+    "id": 4,
+    "title": "Eczane Otomasyon Sistemi",
+    "description": "C# ile gelistirilmis kapsamli eczane yonetim ve otomasyon projesi. Stok takibi, recete yonetimi ve satis islemleri.",
+    "tech": ["C#", ".NET", "SQL Server"],
+    "year": 2025,
+    "category": "fullstack",
+    "featured": false,
+    "image": "/images/pharmacy.jpg",
+    "sourceUrl": "https://github.com/ilaydanur-ucar/PharmacySystem"
+  },
+  {
+    "id": 5,
+    "title": "BSG Key Generator",
+    "description": "Python tabanli guvenli anahtar uretici uygulamasi. Kriptografik yontemlerle rastgele ve guvenli anahtar olusturma.",
+    "tech": ["Python", "Cryptography"],
+    "year": 2025,
+    "category": "backend",
+    "featured": false,
+    "image": "/images/keygen.jpg",
+    "sourceUrl": "https://github.com/ilaydanur-ucar/BSG_KeyGenerator"
+  },
+  {
+    "id": 6,
+    "title": "Kisisel Portfolyo",
+    "description": "React, TypeScript ve Tailwind CSS ile gelistirilmis modern ve responsive kisisel portfolyo web sitesi. Dark mode ve animasyon destegi.",
+    "tech": ["React", "TypeScript", "Tailwind CSS"],
+    "year": 2026,
+    "category": "frontend",
+    "featured": true,
+    "image": "/images/portfolio.jpg",
+    "sourceUrl": "https://github.com/ilaydanur-ucar/Web-Lab"
+  }
+]
