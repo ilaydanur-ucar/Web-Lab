@@ -23,24 +23,29 @@ export default function ContactSection() {
   const [formSubmitted, setFormSubmitted] = useState(false)
 
   return (
-    <section id="contact" className="dark py-16 sm:py-24 px-4 sm:px-8 bg-gradient-to-br from-dark to-dark-surface text-white">
+    <section id="contact" className="py-20 sm:py-28 px-4 sm:px-8 bg-gray-900 text-white">
       <div className="max-w-[1400px] mx-auto">
-        <h2 className="text-3xl sm:text-4xl font-bold text-white text-center mb-2 relative inline-block mx-auto block w-max after:content-[''] after:absolute after:bottom-[-10px] after:left-1/2 after:-translate-x-1/2 after:h-1 after:w-20 after:bg-primary after:rounded">
-          Baglantiya Gecin
-        </h2>
-        <p className="text-lg text-gray-400 text-center mt-4 mb-12">
-          Bir projeniz mi var? Hadi konusalim!
-        </p>
+        {/* Başlık */}
+        <div className="text-center mb-14">
+          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-3">
+            İletişime Geçin
+          </h2>
+          <div className="w-16 h-1 bg-primary mx-auto rounded-full mb-4" />
+          <p className="text-gray-400 max-w-lg mx-auto">
+            Bir proje fikriniz mi var? İş birliği yapmak mı istiyorsunuz?
+            Aşağıdaki formu doldurun veya sosyal medyadan ulaşın.
+          </p>
+        </div>
 
         {formSubmitted && (
           <div className="max-w-[800px] mx-auto mb-8">
             <Alert
               variant="success"
-              title="Mesajiniz Gonderildi!"
+              title="Mesajınız Gönderildi!"
               dismissible
               onDismiss={() => setFormSubmitted(false)}
             >
-              En kisa surede size donus yapacagim. Tesekkurler!
+              En kısa sürede size dönüş yapacağım. Teşekkürler!
             </Alert>
           </div>
         )}
@@ -53,14 +58,14 @@ export default function ContactSection() {
           }}
         >
           <fieldset className="border-none p-0 grid grid-cols-1 md:grid-cols-2 gap-6">
-            <legend className="sr-only">Iletisim Formu</legend>
+            <legend className="sr-only">İletişim Formu</legend>
 
             <Input
               id="name"
               label="Ad Soyad"
               type="text"
               required
-              placeholder="Adinizi giriniz"
+              placeholder="Adınızı giriniz"
             />
 
             <Input
@@ -82,16 +87,16 @@ export default function ContactSection() {
                 required
                 className="w-full px-3 py-2 rounded-lg border border-gray-600 bg-gray-800 text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary transition-colors [&>option]:bg-gray-800 [&>option]:text-white"
               >
-                <option value="">-- Seciniz --</option>
-                <option value="is">Is Teklifi</option>
+                <option value="">-- Seçiniz --</option>
+                <option value="is">İş Teklifi</option>
                 <option value="soru">Soru</option>
-                <option value="oneri">Oneri</option>
+                <option value="oneri">Öneri</option>
               </select>
             </div>
 
             <div className="space-y-1 md:col-span-2">
               <label htmlFor="message" className="block text-sm font-medium text-gray-300">
-                Mesajiniz
+                Mesajınız
               </label>
               <textarea
                 id="message"
@@ -100,22 +105,22 @@ export default function ContactSection() {
                 required
                 minLength={10}
                 maxLength={2000}
-                placeholder="Mesajinizi yaziniz (en az 10 karakter)"
+                placeholder="Mesajınızı yazınız (en az 10 karakter)"
                 aria-describedby="message-help"
                 className="w-full px-3 py-2 rounded-lg border border-gray-600 bg-gray-800 text-gray-100 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-primary transition-colors resize-y"
               />
-              <p id="message-help" className="text-xs text-gray-500">En az 10, en fazla 2000 karakter</p>
+              <p id="message-help" className="text-xs text-gray-500">En az 10, en fazla 2.000 karakter</p>
             </div>
 
             <div className="md:col-span-2">
               <Button variant="primary" size="lg" type="submit" className="w-full sm:w-auto">
-                Gonder
+                Gönder
               </Button>
             </div>
           </fieldset>
         </form>
 
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-stretch mt-8 pt-8 border-t border-white/10">
+        <div className="flex flex-col sm:flex-row gap-4 justify-center items-stretch mt-12 pt-8 border-t border-gray-700">
           <SocialLink href={SOCIAL_LINKS.linkedin} label="LinkedIn Profili">
             {LINKEDIN_ICON}
             LinkedIn

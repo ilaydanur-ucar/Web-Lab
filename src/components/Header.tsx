@@ -16,10 +16,10 @@ function handleSmoothScroll(e: React.MouseEvent<HTMLAnchorElement>, targetId: st
 
 export default function Header({ onNavigateUIKit }: HeaderProps) {
   return (
-    <header className="sticky top-0 z-40 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-b-2 border-gray-200 dark:border-gray-700 shadow-sm">
+    <header className="sticky top-0 z-40 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800 shadow-sm">
       <div className="max-w-6xl mx-auto px-4 py-3 flex flex-col sm:flex-row justify-between items-center gap-3">
         <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary-dark bg-clip-text text-transparent animate-slide-in-left">
-          IU
+          İU
         </h1>
 
         <nav aria-label="Ana navigasyon">

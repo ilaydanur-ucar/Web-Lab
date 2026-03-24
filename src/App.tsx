@@ -25,7 +25,7 @@ function App() {
             onClick={() => setCurrentPage('portfolio')}
             className="text-primary hover:text-primary-dark font-medium transition-colors cursor-pointer"
           >
-            ← Portfoye Don
+            ← Portföye Dön
           </button>
         </div>
         <UIKit />
@@ -41,7 +41,7 @@ function App() {
         href="#main-content"
         className="sr-only focus:not-sr-only focus:absolute focus:top-0 focus:left-0 bg-primary text-white p-2 z-50"
       >
-        Ana icerage atla
+        Ana içeriğe atla
       </a>
 
       <Header onNavigateUIKit={() => setCurrentPage('uikit')} />

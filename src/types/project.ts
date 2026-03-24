@@ -13,6 +13,9 @@ export interface Project {
   readonly id: number;
   title: string;
   description: string;
+  problem?: string;
+  solution?: string;
+  role?: string;
   tech: string[];
   year: number;
   category: Category;

@@ -1,13 +1,13 @@
 import type { Category } from '../types/project'
 
 export const NAV_LINKS = [
-  { id: '#about', label: 'Hakkimda' },
+  { id: '#about', label: 'Hakkımda' },
   { id: '#projects', label: 'Projelerim' },
-  { id: '#contact', label: 'Iletisim' },
+  { id: '#contact', label: 'İletişim' },
 ] as const
 
 export const CATEGORY_LABELS: Record<Category | 'all', string> = {
-  all: 'Tumu',
+  all: 'Tümü',
   frontend: 'Frontend',
   fullstack: 'Full Stack',
   backend: 'Backend',
